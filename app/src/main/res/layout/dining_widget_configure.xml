@@ -10,12 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="@string/configure" />
-
-    <EditText
-        android:id="@+id/appwidget_text"
+    <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:prompt="@string/spinner_prompt"
+        android:entries="@array/configSpinnerOptions" />
 
     <Button
         android:id="@+id/add_button"

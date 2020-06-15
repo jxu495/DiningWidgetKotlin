@@ -14,13 +14,11 @@ import android.widget.EditText
  */
 class DiningWidgetConfigureActivity : Activity() {
     internal var mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    internal var mAppWidgetText: EditText
     internal var mOnClickListener: View.OnClickListener = View.OnClickListener {
         val context = this@DiningWidgetConfigureActivity
 
         // When the button is clicked, store the string locally
-        val widgetText = mAppWidgetText.text.toString()
-        saveTitlePref(context, mAppWidgetId, widgetText)
+        //saveTitlePref(context, mAppWidgetId, widgetText)
 
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -41,7 +39,6 @@ class DiningWidgetConfigureActivity : Activity() {
         setResult(Activity.RESULT_CANCELED)
 
         setContentView(R.layout.dining_widget_configure)
-        mAppWidgetText = findViewById<View>(R.id.appwidget_text) as EditText
         findViewById<View>(R.id.add_button).setOnClickListener(mOnClickListener)
 
         // Find the widget id from the intent.
@@ -59,7 +56,6 @@ class DiningWidgetConfigureActivity : Activity() {
             return
         }
 
-        mAppWidgetText.setText(loadTitlePref(this@DiningWidgetConfigureActivity, mAppWidgetId))
     }
 
     companion object {
