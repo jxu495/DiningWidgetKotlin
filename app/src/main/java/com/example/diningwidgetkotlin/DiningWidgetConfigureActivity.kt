@@ -17,9 +17,12 @@ class DiningWidgetConfigureActivity : Activity() {
     internal var mOnClickListener: View.OnClickListener = View.OnClickListener {
         val context = this@DiningWidgetConfigureActivity
 
-        // When the button is clicked, store the string locally
+        // When the button is clicked, store dining common needed
         //saveTitlePref(context, mAppWidgetId, widgetText)
-
+        val appWidgetId = intent?.extras?.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
         DiningWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId)
