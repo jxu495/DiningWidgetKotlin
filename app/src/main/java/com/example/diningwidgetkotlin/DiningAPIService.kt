@@ -1,10 +1,11 @@
 package com.example.diningwidgetkotlin
 
-import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.Path
 
 interface DiningAPIService {
 
@@ -14,8 +15,9 @@ interface DiningAPIService {
         val station: String
     )
 
+    @Headers() //TODO: add user key and other necessary headers to use ucsb api
     @GET("{date}/{dining_common}/{meal}/")
-    fun getMenu(): Call<List<Entree>>
+    fun getMenu(@Path("date") date: String, @Path("dining_common") diningCommon: String, @Path("meal") meal: String): Call<List<Entree>>
 
     companion object {
         fun create(): DiningAPIService {
