@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import kotlinx.android.synthetic.main.dining_widget_configure.*
 
 /**
  * The configuration screen for the [DiningWidget] AppWidget.
@@ -19,6 +20,8 @@ class DiningWidgetConfigureActivity : Activity() {
 
         // When the button is clicked, store dining common needed
         //saveTitlePref(context, mAppWidgetId, widgetText)
+        //dining_common_spinner replaces findViewbyId(R.id.dining_common_spinner)
+        saveTitlePref(context, mAppWidgetId, dining_common_spinner.selectedItem.toString())
         val appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID

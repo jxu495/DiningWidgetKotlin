@@ -11,6 +11,7 @@
         android:layout_marginBottom="8dp"
         android:text="@string/spinner_prompt" />
     <Spinner
+        android:id="@+id/dining_common_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:prompt="@string/spinner_prompt"
