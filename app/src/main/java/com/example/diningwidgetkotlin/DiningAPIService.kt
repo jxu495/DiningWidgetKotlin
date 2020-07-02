@@ -15,7 +15,7 @@ interface DiningAPIService {
         val station: String
     )
 
-    @Headers() //TODO: add user key and other necessary headers to use ucsb api
+    @Headers(getString(R.string.apikey)) //TODO:Figure out how to get app context here
     @GET("{date}/{dining_common}/{meal}/")
     fun getMenu(@Path("date") date: String, @Path("dining_common") diningCommon: String, @Path("meal") meal: String): Call<List<Entree>>
 
