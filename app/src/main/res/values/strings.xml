@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">DiningWidgetKotlin</string>
-    <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="spinner_prompt">Pick desired dining commons.</string>
 </resources>

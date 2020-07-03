@@ -4,7 +4,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Headers
+import retrofit2.http.Header
 import retrofit2.http.Path
 
 interface DiningAPIService {
@@ -14,10 +14,9 @@ interface DiningAPIService {
         val name: String,
         val station: String
     )
-
-    @Headers(getString(R.string.apikey)) //TODO:Figure out how to get app context here
+    //By passing @Header as a parameter, Retrofit allows dynamic headers
     @GET("{date}/{dining_common}/{meal}/")
-    fun getMenu(@Path("date") date: String, @Path("dining_common") diningCommon: String, @Path("meal") meal: String): Call<List<Entree>>
+    fun getMenu(@Header("ucsb-api-key") key: String, @Path("date") date: String, @Path("dining_common") diningCommon: String, @Path("meal") meal: String): Call<List<Entree>>
 
     companion object {
         fun create(): DiningAPIService {

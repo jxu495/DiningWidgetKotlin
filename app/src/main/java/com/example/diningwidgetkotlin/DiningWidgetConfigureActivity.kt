@@ -81,7 +81,7 @@ class DiningWidgetConfigureActivity : Activity() {
         internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
             val prefs = context.getSharedPreferences(PREFS_NAME, 0)
             val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
-            return titleValue ?: context.getString(R.string.appwidget_text)
+            return titleValue ?: context.getString(R.string.spinner_prompt)
         }
 
         internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
