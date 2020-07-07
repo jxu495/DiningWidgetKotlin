@@ -47,8 +47,7 @@ class DiningWidget : AppWidgetProvider() {
             val widgetText = DiningWidgetConfigureActivity.loadTitlePref(context, appWidgetId)
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.dining_widget)
-            views.setTextViewText(R.id.appwidget_text, widgetText)
-
+            views.setTextViewText(R.id.menuTitle, widgetText)
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }

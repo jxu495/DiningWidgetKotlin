@@ -15,6 +15,7 @@ interface DiningAPIService {
         val station: String
     )
     //By passing @Header as a parameter, Retrofit allows dynamic headers
+    //TODO: Add accept json header
     @GET("{date}/{dining_common}/{meal}/")
     fun getMenu(@Header("ucsb-api-key") key: String, @Path("date") date: String, @Path("dining_common") diningCommon: String, @Path("meal") meal: String): Call<List<Entree>>
 
