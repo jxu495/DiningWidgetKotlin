@@ -5,6 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.Path
 
 interface DiningAPIService {
@@ -15,7 +16,7 @@ interface DiningAPIService {
         val station: String
     )
     //By passing @Header as a parameter, Retrofit allows dynamic headers
-    //TODO: Add accept json header
+    @Headers("accept: application/json")
     @GET("{date}/{dining_common}/{meal}/")
     fun getMenu(@Header("ucsb-api-key") key: String, @Path("date") date: String, @Path("dining_common") diningCommon: String, @Path("meal") meal: String): Call<List<Entree>>
 
