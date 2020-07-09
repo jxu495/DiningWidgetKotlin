@@ -33,11 +33,11 @@ class DiningRemoteViewsFactory(
     }
 
     override fun getItemId(position: Int): Long {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return position.toLong()
     }
 
     override fun hasStableIds(): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return false
     }
 
     override fun getCount(): Int {

@@ -37,4 +37,10 @@
         android:text=">"
         android:textColor="#E6FFEECD"
         android:textSize="20sp" />
+
+    <ListView
+        android:id="@+id/menuList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/menuTitle"/>
 </RelativeLayout>
