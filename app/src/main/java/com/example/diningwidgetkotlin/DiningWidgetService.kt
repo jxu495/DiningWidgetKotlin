@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import retrofit2.Call
 
 class DiningWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
@@ -16,6 +17,9 @@ class DiningRemoteViewsFactory(
     intent: Intent
 ) : RemoteViewsService.RemoteViewsFactory {
 
+    private var menu: ArrayList<DiningAPIService.Entree> = ArrayList()
+    private val APIService = DiningAPIService.create()
+
     override fun onCreate() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -25,7 +29,8 @@ class DiningRemoteViewsFactory(
     }
 
     override fun onDataSetChanged() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //TODO: get date
+        //Call<List<DiningAPIService.Entree>> call = APIService.getMenu(R.string.apikey, )
     }
 
     override fun getViewAt(position: Int): RemoteViews {
