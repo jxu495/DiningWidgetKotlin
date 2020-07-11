@@ -3,6 +3,7 @@ package com.example.diningwidgetkotlin
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.content.Intent
 import android.widget.RemoteViews
 
 /**
@@ -48,6 +49,8 @@ class DiningWidget : AppWidgetProvider() {
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.dining_widget)
             views.setTextViewText(R.id.menuTitle, widgetText)
+            val intent = Intent(context, DiningWidgetService::class.java)
+            views.setRemoteAdapter(R.id.menuList, intent)
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
