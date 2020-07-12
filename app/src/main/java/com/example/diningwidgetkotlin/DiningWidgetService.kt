@@ -6,9 +6,13 @@ import android.content.Intent
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
+typealias Entree = DiningAPIService.Entree
 
 class DiningWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
@@ -38,7 +42,16 @@ class DiningRemoteViewsFactory(
         //TODO: get date
         val currTime = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
         val commons = DiningWidgetConfigureActivity.loadTitlePref(context, mAppWidgetId)
-        //Call<List<DiningAPIService.Entree>> call = APIService.getMenu(R.string.apikey, )
+        val meal = "Dinner" //TODO: PLACEHOLDER
+        var menuCall = APIService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
+        menuCall.enqueue(object : Callback<List<Entree>> {
+            override fun onResponse(call: Call<List<Entree>>, response: Response<List<Entree>>) {
+
+            }
+            override fun onFailure(call: Call<List<Entree>>, t: Throwable) {
+
+            }
+        })
     }
 
     override fun getViewAt(position: Int): RemoteViews {
