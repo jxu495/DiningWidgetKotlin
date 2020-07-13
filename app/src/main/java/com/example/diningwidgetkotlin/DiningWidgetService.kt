@@ -25,8 +25,8 @@ class DiningRemoteViewsFactory(
     intent: Intent
 ) : RemoteViewsService.RemoteViewsFactory {
 
-    private var menu: ArrayList<DiningAPIService.Entree> = ArrayList()
-    private val APIService = DiningAPIService.create()
+    private var menu: List<DiningAPIService.Entree> = ArrayList()
+    private val apiService = DiningAPIService.create()
     private val mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
         AppWidgetManager.INVALID_APPWIDGET_ID)
 
@@ -42,14 +42,20 @@ class DiningRemoteViewsFactory(
         //TODO: get date
         val currTime = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
         val commons = DiningWidgetConfigureActivity.loadTitlePref(context, mAppWidgetId)
-        val meal = "Dinner" //TODO: PLACEHOLDER
-        var menuCall = APIService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
+        val meal = "dinner" //TODO: PLACEHOLDER
+        var menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
         menuCall.enqueue(object : Callback<List<Entree>> {
             override fun onResponse(call: Call<List<Entree>>, response: Response<List<Entree>>) {
-
+                if(response.isSuccessful()) {
+                    menu = response.body()!! //isSuccessful should check for null, so this should be safe
+                } else if(response.code() == 404) {
+                    menu = listOf(Entree("Dining common is not serving today.", "Error"))
+                } else {
+                    menu = listOf(Entree("Unable to fetch menu information.", "Error"))
+                }
             }
             override fun onFailure(call: Call<List<Entree>>, t: Throwable) {
-
+                menu = listOf(Entree("Failed to fetch menu information.", "Error"))
             }
         })
     }
@@ -67,7 +73,7 @@ class DiningRemoteViewsFactory(
     }
 
     override fun getCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return menu.size
     }
 
     override fun getViewTypeCount(): Int {
