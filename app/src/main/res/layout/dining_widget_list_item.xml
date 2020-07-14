@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/widget_list_item_pad"
+    android:paddingRight="@dimen/widget_list_item_pad"
+    android:id="@+id/widget_list_item"
+    android:background="#D9011220">
+    <TextView
+        android:id="@+id/widget_list_item_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#E6FFEECD"
+        android:textSize="16sp"
+        android:text="test"
+    />
+</LinearLayout>
