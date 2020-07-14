@@ -61,7 +61,9 @@ class DiningRemoteViewsFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-
+        var rv = RemoteViews(context.packageName, R.layout.dining_widget_list_item)
+        rv.setTextViewText(R.id.widget_list_item_text, menu[position].name)
+        return rv
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -78,10 +80,10 @@ class DiningRemoteViewsFactory(
     }
 
     override fun getViewTypeCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return 1
     }
 
     override fun onDestroy() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //To change body of created functions use File | Settings | File Templates.
     }
 }
