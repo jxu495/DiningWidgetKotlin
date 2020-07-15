@@ -1,5 +1,7 @@
 package com.example.diningwidgetkotlin
 
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,14 +19,18 @@ interface DiningAPIService {
     )
     //By passing @Header as a parameter, Retrofit allows dynamic headers
     @Headers("accept: application/json")
-    @GET("{date}/{dining_common}/{meal}/")
+    @GET("{date}/{dining_common}/{meal}")
     fun getMenu(@Header("ucsb-api-key") key: String, @Path("date") date: String, @Path("dining_common") diningCommon: String, @Path("meal") meal: String): Call<List<Entree>>
 
     companion object {
         fun create(): DiningAPIService {
+//            val logging = HttpLoggingInterceptor()
+//            logging.setLevel(HttpLoggingInterceptor.Level.HEADERS)
+//            val client = OkHttpClient.Builder().addInterceptor(logging).build()
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl("https://api.ucsb.edu/dining/menu/v1/")
+                //.client(client)
                 .build()
             return retrofit.create(DiningAPIService::class.java)
         }

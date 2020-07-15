@@ -41,6 +41,7 @@ class DiningRemoteViewsFactory(
         val commons = DiningWidgetConfigureActivity.loadTitlePref(context, mAppWidgetId)
         val meal = "dinner" //TODO: PLACEHOLDER
         var menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
+        //TODO: FIGURE OUT WHY HEADER NOT PASSING IN PROPERLY
         try {
             val response = menuCall.execute()
             if(response.isSuccessful) {
