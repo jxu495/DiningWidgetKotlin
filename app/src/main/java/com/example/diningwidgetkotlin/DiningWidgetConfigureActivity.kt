@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import kotlinx.android.synthetic.main.dining_widget_configure.*
@@ -22,14 +23,9 @@ class DiningWidgetConfigureActivity : Activity() {
         //saveTitlePref(context, mAppWidgetId, widgetText)
         //dining_common_spinner replaces findViewbyId(R.id.dining_common_spinner)
         saveTitlePref(context, mAppWidgetId, dining_common_spinner.selectedItem.toString())
-        val appWidgetId = intent?.extras?.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID
-        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
         DiningWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId)
-
         // Make sure we pass back the original appWidgetId
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)

@@ -3,11 +3,9 @@ package com.example.diningwidgetkotlin
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -39,32 +37,46 @@ class DiningRemoteViewsFactory(
     }
 
     override fun onDataSetChanged() {
-        //TODO: get date
         val currTime = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
         val commons = DiningWidgetConfigureActivity.loadTitlePref(context, mAppWidgetId)
         val meal = "dinner" //TODO: PLACEHOLDER
         var menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
-        menuCall.enqueue(object : Callback<List<Entree>> {
-            override fun onResponse(call: Call<List<Entree>>, response: Response<List<Entree>>) {
-                if(response.isSuccessful()) {
-                    menu = response.body()!! //isSuccessful should check for null, so this should be safe
-                } else if(response.code() == 404) {
-                    menu = listOf(Entree("Dining common is not serving today.", "Error"))
-                } else {
-                    menu = listOf(Entree("Unable to fetch menu information.", "Error"))
-                }
+        try {
+            val response = menuCall.execute()
+            if(response.isSuccessful) {
+                menu = response.body()!!
+            } else if(response.code() == 404) {
+                menu = listOf(Entree("Dining common is not serving today.", "Error"))
+            } else {
+                menu = listOf(Entree("Unable to fetch menu information.", "Error"))
             }
-            override fun onFailure(call: Call<List<Entree>>, t: Throwable) {
-                menu = listOf(Entree("Failed to fetch menu information.", "Error"))
-            }
-        })
+        } catch (e: Exception){
+            menu = listOf(Entree("Failed to fetch menu information.", "Error"))
+            e.printStackTrace()
+        }
+//        menuCall.enqueue(object : Callback<List<Entree>> {
+//            override fun onResponse(call: Call<List<Entree>>, response: Response<List<Entree>>) {
+//                if(response.isSuccessful()) {
+//                    menu = response.body()!! //isSuccessful should check for null, so this should be safe
+//                } else if(response.code() == 404) {
+//                    menu = listOf(Entree("Dining common is not serving today.", "Error"))
+//                } else {
+//                    menu = listOf(Entree("Unable to fetch menu information.", "Error"))
+//                }
+//            }
+//            override fun onFailure(call: Call<List<Entree>>, t: Throwable) {
+//                menu = listOf(Entree("Failed to fetch menu information.", "Error"))
+//            }
+//        })
     }
 
     override fun getViewAt(position: Int): RemoteViews {
         var rv = RemoteViews(context.packageName, R.layout.dining_widget_list_item)
+        //TODO:Remove
+        Log.d("Test", menu[position].name)
         rv.setTextViewText(R.id.widget_list_item_text, menu[position].name)
         return rv
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getItemId(position: Int): Long {
