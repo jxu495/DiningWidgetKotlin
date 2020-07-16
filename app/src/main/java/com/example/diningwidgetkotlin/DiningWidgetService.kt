@@ -11,6 +11,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 typealias Entree = DiningAPIService.Entree
+typealias Meal = DiningAPIService.Meal
 
 class DiningWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory {
@@ -23,7 +24,8 @@ class DiningRemoteViewsFactory(
     intent: Intent
 ) : RemoteViewsService.RemoteViewsFactory {
 
-    private var menu: List<DiningAPIService.Entree> = ArrayList()
+    private var menu: List<Entree> = ArrayList()
+    private var meals: List<Meal> = ArrayList()
     private val apiService = DiningAPIService.create()
     private val mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
         AppWidgetManager.INVALID_APPWIDGET_ID)
@@ -38,10 +40,29 @@ class DiningRemoteViewsFactory(
 
     override fun onDataSetChanged() {
         val currTime = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
+        //toLowerCase and replacing spaces with dashes needed to convert user friendly name to api friendly name.
         val commons = DiningWidgetConfigureActivity.loadTitlePref(context, mAppWidgetId)
-        val meal = "dinner" //TODO: PLACEHOLDER
-        var menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
-        //TODO: FIGURE OUT WHY HEADER NOT PASSING IN PROPERLY
+            .toLowerCase()
+            .replace(' ', '-')
+        val mealCall = apiService.getMeals(context.getString(R.string.apikey), currTime, commons)
+        try {
+            val response = mealCall.execute()
+            if(response.isSuccessful) {
+                meals = response.body()!!
+            } else if(response.code() == 404) {
+                menu = listOf(Entree("Dining common is not serving today.", "Error"))
+                return
+            } else {
+                menu = listOf(Entree("Unable to fetch menu information.", "Error"))
+                return
+            }
+        } catch (e: Exception){
+            menu = listOf(Entree("Failed to fetch menu information.", "Error"))
+            e.printStackTrace()
+            return
+        }
+        var meal = "dinner" //TODO: PLACEHOLDER, switch so that it collects all menu data for the day
+        val menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
         try {
             val response = menuCall.execute()
             if(response.isSuccessful) {
@@ -55,26 +76,10 @@ class DiningRemoteViewsFactory(
             menu = listOf(Entree("Failed to fetch menu information.", "Error"))
             e.printStackTrace()
         }
-//        menuCall.enqueue(object : Callback<List<Entree>> {
-//            override fun onResponse(call: Call<List<Entree>>, response: Response<List<Entree>>) {
-//                if(response.isSuccessful()) {
-//                    menu = response.body()!! //isSuccessful should check for null, so this should be safe
-//                } else if(response.code() == 404) {
-//                    menu = listOf(Entree("Dining common is not serving today.", "Error"))
-//                } else {
-//                    menu = listOf(Entree("Unable to fetch menu information.", "Error"))
-//                }
-//            }
-//            override fun onFailure(call: Call<List<Entree>>, t: Throwable) {
-//                menu = listOf(Entree("Failed to fetch menu information.", "Error"))
-//            }
-//        })
     }
 
     override fun getViewAt(position: Int): RemoteViews {
         var rv = RemoteViews(context.packageName, R.layout.dining_widget_list_item)
-        //TODO:Remove
-        Log.d("Test", menu[position].name)
         rv.setTextViewText(R.id.widget_list_item_text, menu[position].name)
         return rv
         //To change body of created functions use File | Settings | File Templates.
