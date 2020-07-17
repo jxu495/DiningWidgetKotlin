@@ -13,6 +13,16 @@
         android:textAlignment="center"
         android:textColor="#E6FFEECD"
         android:textSize="14sp" />
+    <TextView
+        android:id="@+id/mealTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/menuTitle"
+        android:text="Meal - Date"
+        android:textAlignment="center"
+        android:textColor="#E6FFEECD"
+        android:textSize="12sp" />
 
     <Button
         android:id="@+id/leftButton"
@@ -20,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@id/menuTitle"
-        android:layout_alignBottom="@id/menuTitle"
+        android:layout_alignBottom="@id/mealTime"
         android:background="#CC174361"
         android:drawableLeft="@drawable/ic_widget_arrow_left_24dp"
         android:textColor="#E6FFEECD"
@@ -32,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@id/menuTitle"
-        android:layout_alignBottom="@id/menuTitle"
+        android:layout_alignBottom="@id/mealTime"
         android:background="#CC174361"
         android:drawableRight="@drawable/ic_widget_arrow_right_24dp"
         android:textColor="#E6FFEECD"
@@ -42,5 +52,5 @@
         android:id="@+id/menuList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/menuTitle"/>
+        android:layout_below="@id/mealTime"/>
 </RelativeLayout>

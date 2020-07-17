@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#E6FFEECD"
-        android:textSize="16sp"
-        android:text="test"
+        android:textSize="12sp"
     />
 </LinearLayout>
