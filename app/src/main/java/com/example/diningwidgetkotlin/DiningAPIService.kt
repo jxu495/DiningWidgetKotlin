@@ -39,13 +39,22 @@ interface DiningAPIService {
 
     companion object {
         fun create(): DiningAPIService {
-//            val logging = HttpLoggingInterceptor()
-//            logging.setLevel(HttpLoggingInterceptor.Level.HEADERS)
-//            val client = OkHttpClient.Builder().addInterceptor(logging).build()
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl("https://api.ucsb.edu/dining/menu/v1/")
-                //.client(client)
+
+                .build()
+            return retrofit.create(DiningAPIService::class.java)
+        }
+        //Use below in place of create() to get logcat info
+        fun loggerCreate(): DiningAPIService {
+            val logging = HttpLoggingInterceptor()
+            logging.setLevel(HttpLoggingInterceptor.Level.HEADERS)
+            val client = OkHttpClient.Builder().addInterceptor(logging).build()
+            val retrofit = Retrofit.Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://api.ucsb.edu/dining/menu/v1/")
+                .client(client)
                 .build()
             return retrofit.create(DiningAPIService::class.java)
         }

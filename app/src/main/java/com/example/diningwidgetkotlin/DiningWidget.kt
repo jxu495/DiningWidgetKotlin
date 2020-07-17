@@ -49,7 +49,8 @@ class DiningWidget : AppWidgetProvider() {
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.dining_widget)
             views.setTextViewText(R.id.menuTitle, widgetText)
-            //TODO: Add textview below menuTitle that has the date and meal information for the menu
+            //TODO: update mealInfo text in onReceive, use partial update, send widgetID in broadcast
+            //TODO: Make sure buttons send pending intent w/ appWidgetID request codes to make them distinct - send intent to widget activity, use partial update
             val intent = Intent(context, DiningWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             }

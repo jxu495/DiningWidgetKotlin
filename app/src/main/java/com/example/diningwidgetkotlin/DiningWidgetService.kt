@@ -61,7 +61,7 @@ class DiningRemoteViewsFactory(
             e.printStackTrace()
             return
         }
-        var meal = "dinner" //TODO: PLACEHOLDER, switch so that it collects all menu data for the day
+        var meal = "dinner" //TODO: Use meals[index] here instead, account for looping when out of bounds
         val menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
         try {
             val response = menuCall.execute()
