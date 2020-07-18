@@ -81,10 +81,10 @@ class DiningRemoteViewsFactory(
     }
 
     private fun getMeal(): String {
-        var usedButton = intent.getStringExtra("Button")
+        var usedButton = DiningWidget.loadTitlePref(context, mAppWidgetId)
         //TODO:Remove
         Log.d(LOG_TAG, "in getMeal, usedbutton is $usedButton")
-        if(usedButton != null) {
+        if(usedButton != null || usedButton == "none") {
             when(usedButton) {
                 "left" -> {
                     if(mealIndex - 1 < 0) {
