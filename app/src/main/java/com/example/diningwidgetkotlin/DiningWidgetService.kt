@@ -21,11 +21,12 @@ class DiningWidgetService : RemoteViewsService() {
 
 class DiningRemoteViewsFactory(
     private val context: Context,
-    intent: Intent
+    val intent: Intent
 ) : RemoteViewsService.RemoteViewsFactory {
-
+    //TODO: Figure out how to get around caching
     private var menu: List<Entree> = ArrayList()
     private var meals: List<Meal> = ArrayList()
+    private var mealIndex = 0
     private val apiService = DiningAPIService.create()
     private val mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
         AppWidgetManager.INVALID_APPWIDGET_ID)
@@ -61,7 +62,8 @@ class DiningRemoteViewsFactory(
             e.printStackTrace()
             return
         }
-        var meal = "dinner" //TODO: Use meals[index] here instead, account for looping when out of bounds
+        var meal = getMeal()
+        //TODO: Use meals[index] here instead, account for looping when out of bounds
         val menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
         try {
             val response = menuCall.execute()
@@ -76,6 +78,36 @@ class DiningRemoteViewsFactory(
             menu = listOf(Entree("Failed to fetch menu information.", "Error"))
             e.printStackTrace()
         }
+    }
+
+    private fun getMeal(): String {
+        var usedButton = intent.getStringExtra("Button")
+        //TODO:Remove
+        Log.d(LOG_TAG, "in getMeal, usedbutton is $usedButton")
+        if(usedButton != null) {
+            when(usedButton) {
+                "left" -> {
+                    if(mealIndex - 1 < 0) {
+                        mealIndex = meals.lastIndex
+                    } else {
+                        mealIndex--;
+                    }
+                }
+                "right" -> {
+                    if(mealIndex + 1 > meals.lastIndex) {
+                        mealIndex = 0
+                    } else {
+                        mealIndex++
+                    }
+                }
+                else -> {
+                    Log.d("Widget Service",
+                        "usedButton string extra was not a valid option: $usedButton"
+                    )
+                }
+            }
+        }
+        return meals[mealIndex].code
     }
 
     override fun getViewAt(position: Int): RemoteViews {
@@ -102,6 +134,9 @@ class DiningRemoteViewsFactory(
     }
 
     override fun onDestroy() {
-        //To change body of created functions use File | Settings | File Templates.
+
+    }
+    companion object {
+        const val LOG_TAG = "Widget Factory"
     }
 }
