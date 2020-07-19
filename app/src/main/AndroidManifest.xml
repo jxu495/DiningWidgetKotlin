@@ -12,6 +12,7 @@
         <receiver android:name=".DiningWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.diningwidgetkotlin.UPDATE_MEAL" />
             </intent-filter>
 
             <meta-data

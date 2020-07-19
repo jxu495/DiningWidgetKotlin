@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="configSpinnerOptions">
-        <item>Choose Dining Commons</item>
         <item>De La Guerra</item>
         <item>Carrillo</item>
         <item>Ortega</item>

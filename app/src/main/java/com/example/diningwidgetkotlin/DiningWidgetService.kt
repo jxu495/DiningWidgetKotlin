@@ -21,9 +21,8 @@ class DiningWidgetService : RemoteViewsService() {
 
 class DiningRemoteViewsFactory(
     private val context: Context,
-    val intent: Intent
+    intent: Intent
 ) : RemoteViewsService.RemoteViewsFactory {
-    //TODO: Figure out how to get around caching
     private var menu: List<Entree> = ArrayList()
     private var meals: List<Meal> = ArrayList()
     private var mealIndex = 0
@@ -62,9 +61,18 @@ class DiningRemoteViewsFactory(
             e.printStackTrace()
             return
         }
-        var meal = getMeal()
-        //TODO: Use meals[index] here instead, account for looping when out of bounds
-        val menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, meal)
+        val meal = getMeal()
+        val mealCode = meal.code
+        val mealInfoName = meal.name
+        val mealInfoTime = SimpleDateFormat("MM/dd", Locale.US).format(Date())
+        Intent().also { intent ->
+            intent.action = DiningWidget.UPDATE_MEAL
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId)
+            intent.putExtra("mealInfo", "$mealInfoTime - $mealInfoName")
+            context.sendBroadcast(intent)
+        }
+
+        val menuCall = apiService.getMenu(context.getString(R.string.apikey), currTime, commons, mealCode)
         try {
             val response = menuCall.execute()
             if(response.isSuccessful) {
@@ -80,10 +88,10 @@ class DiningRemoteViewsFactory(
         }
     }
 
-    private fun getMeal(): String {
-        var usedButton = DiningWidget.loadTitlePref(context, mAppWidgetId)
+    private fun getMeal(): Meal {
+        var usedButton = DiningWidget.loadButtonPref(context, mAppWidgetId)
         //TODO:Remove
-        Log.d(LOG_TAG, "in getMeal, usedbutton is $usedButton")
+//        Log.d(LOG_TAG, "in getMeal, usedbutton is $usedButton")
         if(usedButton != null || usedButton == "none") {
             when(usedButton) {
                 "left" -> {
@@ -107,7 +115,7 @@ class DiningRemoteViewsFactory(
                 }
             }
         }
-        return meals[mealIndex].code
+        return meals[mealIndex]
     }
 
     override fun getViewAt(position: Int): RemoteViews {

@@ -47,11 +47,10 @@ class DiningWidget : AppWidgetProvider() {
             R_BUTTON_CLICK -> {
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 if(context != null)
-                    saveTitlePref(context, appWidgetId, "right")
+                    saveButtonPref(context, appWidgetId, "right")
                 val views = RemoteViews(context?.packageName, R.layout.dining_widget)
                 val lvIntent = Intent(context, DiningWidgetService::class.java).apply {
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-//                    putExtra("Button", "right")
                     //Needed because Android caches intents, since it views it as a duplicate of the original as extras are ignored when comparing
                     data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
                 }
@@ -59,18 +58,16 @@ class DiningWidget : AppWidgetProvider() {
                 // Instruct the widget manager to update the widget
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 //TODO: Remove
-                Log.d(LOG_TAG, "right click registered")
+//                Log.d(LOG_TAG, "right click registered")
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.menuList)
-//                appWidgetManager.updateAppWidget(appWidgetId, views)
             }
             L_BUTTON_CLICK -> {
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 if(context != null)
-                    saveTitlePref(context, appWidgetId, "left")
+                    saveButtonPref(context, appWidgetId, "left")
                 val views = RemoteViews(context?.packageName, R.layout.dining_widget)
                 val lvIntent = Intent(context, DiningWidgetService::class.java).apply {
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-//                    putExtra("Button", "left")
                     //Needed because Android caches intents, since it views it as a duplicate of the original as extras are ignored when comparing
                     data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
                 }
@@ -78,18 +75,16 @@ class DiningWidget : AppWidgetProvider() {
                 // Instruct the widget manager to update the widget
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 //TODO: Remove
-                Log.d(LOG_TAG, "left click registered")
+//                Log.d(LOG_TAG, "left click registered")
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.menuList)
-//                appWidgetManager.updateAppWidget(appWidgetId, views)
-//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.menuList)
             }
             UPDATE_MEAL -> {
                 val views = RemoteViews(context?.packageName, R.layout.dining_widget)
-                val mealString = intent.getStringExtra("Meal")
+                val mealInfo = intent.getStringExtra("mealInfo")
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-                views.setTextViewText(R.id.mealTime, mealString)
+                views.setTextViewText(R.id.mealTime, mealInfo)
                 val appWidgetManager = AppWidgetManager.getInstance(context)
-                appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
+                appWidgetManager.updateAppWidget(appWidgetId, views)
             }
             else -> {
 
@@ -102,9 +97,9 @@ class DiningWidget : AppWidgetProvider() {
         private const val PREFS_NAME = "com.example.diningwidgetkotlin.DiningWidget"
         private const val PREF_PREFIX_KEY = "appwidget_button_"
         //states used for onReceive responses
-        const val R_BUTTON_CLICK = "rButtonClick"
-        const val L_BUTTON_CLICK = "lButtonClick"
-        const val UPDATE_MEAL = "updateMeal"
+        const val R_BUTTON_CLICK = "com.example.diningwidgetkotlin.R_BUTTON_CLICK"
+        const val L_BUTTON_CLICK = "com.example.diningwidgetkotlin.L_BUTTON_CLICK"
+        const val UPDATE_MEAL = "com.example.diningwidgetkotlin.UPDATE_MEAL"
         //debug use
         const val LOG_TAG = "Dining Widget"
 
@@ -113,14 +108,13 @@ class DiningWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
             val widgetText = DiningWidgetConfigureActivity.loadTitlePref(context, appWidgetId)
-            saveTitlePref(context, appWidgetId, "none")
+            saveButtonPref(context, appWidgetId, "none")
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.dining_widget)
             views.setTextViewText(R.id.menuTitle, widgetText)
             views.setOnClickPendingIntent(R.id.leftButton, getSelfPendingIntent(context, L_BUTTON_CLICK, appWidgetId))
             views.setOnClickPendingIntent(R.id.rightButton, getSelfPendingIntent(context, R_BUTTON_CLICK, appWidgetId))
             //TODO: update mealInfo text in onReceive, use partial update, send widgetID in broadcast
-            //TODO: Make sure buttons send pending intent w/ appWidgetID request codes to make them distinct - send intent to widget activity
             val intent = Intent(context, DiningWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 putExtra("Button", "none")
@@ -140,7 +134,7 @@ class DiningWidget : AppWidgetProvider() {
             return PendingIntent.getBroadcast(context, appWidgetId, intent, 0)
         }
 
-        private fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
+        private fun saveButtonPref(context: Context, appWidgetId: Int, text: String) {
             val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
             prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
             prefs.apply()
@@ -148,7 +142,7 @@ class DiningWidget : AppWidgetProvider() {
 
         // Read the prefix from the SharedPreferences object for this widget.
         // If there is no preference saved, get the default from a resource
-        internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
+        internal fun loadButtonPref(context: Context, appWidgetId: Int): String {
             val prefs = context.getSharedPreferences(PREFS_NAME, 0)
             val buttonValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
             return buttonValue ?: "none"
