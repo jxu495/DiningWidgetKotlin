@@ -45,6 +45,7 @@ class DiningWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
         when(intent?.action) {
             R_BUTTON_CLICK -> {
+                //TODO: Consider having a toast prompt/loading screen so users know if menu is being loaded
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 if(context != null)
                     saveButtonPref(context, appWidgetId, "right")
@@ -114,7 +115,6 @@ class DiningWidget : AppWidgetProvider() {
             views.setTextViewText(R.id.menuTitle, widgetText)
             views.setOnClickPendingIntent(R.id.leftButton, getSelfPendingIntent(context, L_BUTTON_CLICK, appWidgetId))
             views.setOnClickPendingIntent(R.id.rightButton, getSelfPendingIntent(context, R_BUTTON_CLICK, appWidgetId))
-            //TODO: update mealInfo text in onReceive, use partial update, send widgetID in broadcast
             val intent = Intent(context, DiningWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 putExtra("Button", "none")
