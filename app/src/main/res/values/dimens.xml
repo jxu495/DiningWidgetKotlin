@@ -7,4 +7,5 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="widget_list_item_pad">10dp</dimen>
+    <dimen name="widget_list_item_station_pad">11dp</dimen>
 </resources>

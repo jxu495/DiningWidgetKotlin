@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:id="@+id/widget_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#D9011220"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/widget_list_item_pad"
-    android:paddingRight="@dimen/widget_list_item_pad"
-    android:id="@+id/widget_list_item"
-    android:background="#D9011220">
+    android:paddingRight="@dimen/widget_list_item_pad">
+
     <TextView
         android:id="@+id/widget_list_item_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#E6FFEECD"
         android:textSize="12sp"
-    />
+        android:text="entree"/>
+
+    <TextView
+        android:id="@+id/widget_list_item_station"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/widget_list_item_station_pad"
+        android:text="station"
+        android:textColor="#E6D6AD5C"
+        android:textSize="10sp" />
 </LinearLayout>

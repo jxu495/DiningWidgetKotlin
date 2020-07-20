@@ -119,9 +119,9 @@ class DiningRemoteViewsFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        //TODO: Consider adding the station to the list item
         var rv = RemoteViews(context.packageName, R.layout.dining_widget_list_item)
         rv.setTextViewText(R.id.widget_list_item_text, menu[position].name)
+        rv.setTextViewText(R.id.widget_list_item_station, menu[position].station)
         return rv
         //To change body of created functions use File | Settings | File Templates.
     }

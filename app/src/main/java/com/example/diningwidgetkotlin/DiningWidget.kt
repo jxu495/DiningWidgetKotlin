@@ -113,6 +113,7 @@ class DiningWidget : AppWidgetProvider() {
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.dining_widget)
             views.setTextViewText(R.id.menuTitle, widgetText)
+            //TODO: Option to reconfigure dining common by pressing the textview
             views.setOnClickPendingIntent(R.id.leftButton, getSelfPendingIntent(context, L_BUTTON_CLICK, appWidgetId))
             views.setOnClickPendingIntent(R.id.rightButton, getSelfPendingIntent(context, R_BUTTON_CLICK, appWidgetId))
             val intent = Intent(context, DiningWidgetService::class.java).apply {
