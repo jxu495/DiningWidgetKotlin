@@ -143,8 +143,7 @@ class DiningRemoteViewsFactory(
     }
 
     override fun onDestroy() {
-        DiningWidgetConfigureActivity.deleteTitlePref(context, mAppWidgetId)
-        DiningWidget.deleteButtonPref(context, mAppWidgetId)
+
     }
     companion object {
         const val LOG_TAG = "Widget Factory"

@@ -31,6 +31,7 @@ class DiningWidget : AppWidgetProvider() {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
             DiningWidgetConfigureActivity.deleteTitlePref(context, appWidgetId)
+            deleteButtonPref(context, appWidgetId)
         }
     }
 
@@ -41,6 +42,8 @@ class DiningWidget : AppWidgetProvider() {
     override fun onDisabled(context: Context) {
         // Enter relevant functionality for when the last widget is disabled
     }
+
+
 
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
