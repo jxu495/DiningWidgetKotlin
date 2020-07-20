@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import android.widget.Toast
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,7 +32,7 @@ class DiningRemoteViewsFactory(
         AppWidgetManager.INVALID_APPWIDGET_ID)
 
     override fun onCreate() {
-
+        Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
     }
 
     override fun getLoadingView(): RemoteViews? {
@@ -90,7 +91,6 @@ class DiningRemoteViewsFactory(
 
     private fun getMeal(): Meal {
         var usedButton = DiningWidget.loadButtonPref(context, mAppWidgetId)
-        //TODO:Remove
 //        Log.d(LOG_TAG, "in getMeal, usedbutton is $usedButton")
         if(usedButton != null || usedButton == "none") {
             when(usedButton) {
@@ -143,7 +143,8 @@ class DiningRemoteViewsFactory(
     }
 
     override fun onDestroy() {
-
+        DiningWidgetConfigureActivity.deleteTitlePref(context, mAppWidgetId)
+        DiningWidget.deleteButtonPref(context, mAppWidgetId)
     }
     companion object {
         const val LOG_TAG = "Widget Factory"

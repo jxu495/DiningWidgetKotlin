@@ -8,6 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.RemoteViews
+import android.widget.Toast
 
 /**
  * Implementation of App Widget functionality.
@@ -47,8 +48,10 @@ class DiningWidget : AppWidgetProvider() {
             R_BUTTON_CLICK -> {
                 //TODO: Consider having a toast prompt/loading screen so users know if menu is being loaded
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-                if(context != null)
+                if(context != null) {
                     saveButtonPref(context, appWidgetId, "right")
+                    Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
+                }
                 val views = RemoteViews(context?.packageName, R.layout.dining_widget)
                 val lvIntent = Intent(context, DiningWidgetService::class.java).apply {
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -58,14 +61,15 @@ class DiningWidget : AppWidgetProvider() {
                 views.setRemoteAdapter(R.id.menuList, lvIntent)
                 // Instruct the widget manager to update the widget
                 val appWidgetManager = AppWidgetManager.getInstance(context)
-                //TODO: Remove
 //                Log.d(LOG_TAG, "right click registered")
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.menuList)
             }
             L_BUTTON_CLICK -> {
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-                if(context != null)
+                if(context != null) {
                     saveButtonPref(context, appWidgetId, "left")
+                    Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
+                }
                 val views = RemoteViews(context?.packageName, R.layout.dining_widget)
                 val lvIntent = Intent(context, DiningWidgetService::class.java).apply {
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -75,7 +79,6 @@ class DiningWidget : AppWidgetProvider() {
                 views.setRemoteAdapter(R.id.menuList, lvIntent)
                 // Instruct the widget manager to update the widget
                 val appWidgetManager = AppWidgetManager.getInstance(context)
-                //TODO: Remove
 //                Log.d(LOG_TAG, "left click registered")
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.menuList)
             }
@@ -147,6 +150,12 @@ class DiningWidget : AppWidgetProvider() {
             val prefs = context.getSharedPreferences(PREFS_NAME, 0)
             val buttonValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
             return buttonValue ?: "none"
+        }
+
+        internal fun deleteButtonPref(context: Context, appWidgetId: Int) {
+            val prefs = context.getSharedPreferences(DiningWidget.PREFS_NAME, 0).edit()
+            prefs.remove(DiningWidget.PREF_PREFIX_KEY + appWidgetId)
+            prefs.apply()
         }
     }
 }

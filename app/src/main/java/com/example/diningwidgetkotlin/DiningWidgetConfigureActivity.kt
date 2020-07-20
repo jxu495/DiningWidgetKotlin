@@ -63,7 +63,7 @@ class DiningWidgetConfigureActivity : Activity() {
     companion object {
 
         private const val PREFS_NAME = "com.example.diningwidgetkotlin.DiningWidget"
-        private const val PREF_PREFIX_KEY = "appwidget_"
+        private const val PREF_PREFIX_KEY = "appwidget_title_"
 
         // Write the prefix to the SharedPreferences object for this widget
         internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
