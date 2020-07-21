@@ -36,7 +36,7 @@ class DiningRemoteViewsFactory(
     }
 
     override fun getLoadingView(): RemoteViews? {
-        return null //Returning null uses the default loading view.
+        return null
     }
 
     override fun onDataSetChanged() {
@@ -119,7 +119,7 @@ class DiningRemoteViewsFactory(
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        var rv = RemoteViews(context.packageName, R.layout.dining_widget_list_item)
+        val rv = RemoteViews(context.packageName, R.layout.dining_widget_list_item)
         rv.setTextViewText(R.id.widget_list_item_text, menu[position].name)
         rv.setTextViewText(R.id.widget_list_item_station, menu[position].station)
         return rv

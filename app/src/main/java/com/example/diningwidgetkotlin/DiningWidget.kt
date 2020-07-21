@@ -49,19 +49,12 @@ class DiningWidget : AppWidgetProvider() {
         super.onReceive(context, intent)
         when(intent?.action) {
             R_BUTTON_CLICK -> {
-                //TODO: Consider having a toast prompt/loading screen so users know if menu is being loaded
+                //TODO: Can replace most of these with a single function, aside from update meal
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 if(context != null) {
                     saveButtonPref(context, appWidgetId, "right")
                     Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
                 }
-                val views = RemoteViews(context?.packageName, R.layout.dining_widget)
-                val lvIntent = Intent(context, DiningWidgetService::class.java).apply {
-                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                    //Needed because Android caches intents, since it views it as a duplicate of the original as extras are ignored when comparing
-                    data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
-                }
-                views.setRemoteAdapter(R.id.menuList, lvIntent)
                 // Instruct the widget manager to update the widget
                 val appWidgetManager = AppWidgetManager.getInstance(context)
 //                Log.d(LOG_TAG, "right click registered")
@@ -73,13 +66,6 @@ class DiningWidget : AppWidgetProvider() {
                     saveButtonPref(context, appWidgetId, "left")
                     Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
                 }
-                val views = RemoteViews(context?.packageName, R.layout.dining_widget)
-                val lvIntent = Intent(context, DiningWidgetService::class.java).apply {
-                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                    //Needed because Android caches intents, since it views it as a duplicate of the original as extras are ignored when comparing
-                    data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
-                }
-                views.setRemoteAdapter(R.id.menuList, lvIntent)
                 // Instruct the widget manager to update the widget
                 val appWidgetManager = AppWidgetManager.getInstance(context)
 //                Log.d(LOG_TAG, "left click registered")
@@ -92,6 +78,15 @@ class DiningWidget : AppWidgetProvider() {
                 views.setTextViewText(R.id.mealTime, mealInfo)
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 appWidgetManager.updateAppWidget(appWidgetId, views)
+            }
+            REFRESH_MENU -> {
+                val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+                if(context != null) {
+                    saveButtonPref(context, appWidgetId, "none")
+                    Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
+                }
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.menuList)
             }
             else -> {
 
@@ -106,6 +101,7 @@ class DiningWidget : AppWidgetProvider() {
         //states used for onReceive responses
         const val R_BUTTON_CLICK = "com.example.diningwidgetkotlin.R_BUTTON_CLICK"
         const val L_BUTTON_CLICK = "com.example.diningwidgetkotlin.L_BUTTON_CLICK"
+        const val REFRESH_MENU = "com.example.diningwidgetkotlin.REFRESH_MENU"
         const val UPDATE_MEAL = "com.example.diningwidgetkotlin.UPDATE_MEAL"
         //debug use
         const val LOG_TAG = "Dining Widget"
@@ -119,9 +115,9 @@ class DiningWidget : AppWidgetProvider() {
             // Construct the RemoteViews object
             val views = RemoteViews(context.packageName, R.layout.dining_widget)
             views.setTextViewText(R.id.menuTitle, widgetText)
-            //TODO: Option to reconfigure dining common by pressing the textview
             views.setOnClickPendingIntent(R.id.leftButton, getSelfPendingIntent(context, L_BUTTON_CLICK, appWidgetId))
             views.setOnClickPendingIntent(R.id.rightButton, getSelfPendingIntent(context, R_BUTTON_CLICK, appWidgetId))
+            views.setOnClickPendingIntent(R.id.menuTitle, getUpdatePendingIntent(context, appWidgetId))
             val intent = Intent(context, DiningWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 putExtra("Button", "none")
@@ -137,6 +133,13 @@ class DiningWidget : AppWidgetProvider() {
         private fun getSelfPendingIntent(context: Context, action: String, appWidgetId: Int): PendingIntent {
             val intent = Intent(context, DiningWidget::class.java)
             intent.action = action
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            return PendingIntent.getBroadcast(context, appWidgetId, intent, 0)
+        }
+
+        private fun getUpdatePendingIntent(context: Context, appWidgetId: Int): PendingIntent {
+            val intent = Intent(context, DiningWidget::class.java)
+            intent.action = REFRESH_MENU
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             return PendingIntent.getBroadcast(context, appWidgetId, intent, 0)
         }

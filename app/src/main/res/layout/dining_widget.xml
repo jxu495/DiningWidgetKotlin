@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:clickable="true"
         android:text="Dining Common"
         android:textAlignment="center"
         android:textColor="#E6FFEECD"
