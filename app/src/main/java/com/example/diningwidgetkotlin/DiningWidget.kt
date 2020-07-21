@@ -110,17 +110,20 @@ class DiningWidget : AppWidgetProvider() {
             context: Context, appWidgetManager: AppWidgetManager,
             appWidgetId: Int
         ) {
+            //Fetch selected dining commons from SharedPreferences, which was selected from DiningWidgetConfigureActivity.kt
             val widgetText = DiningWidgetConfigureActivity.loadTitlePref(context, appWidgetId)
+            //SharedPreferences value that determines if the menu should display the next/previous meal
             saveButtonPref(context, appWidgetId, "none")
-            // Construct the RemoteViews object
+            // Construct the RemoteViews object from xml layout
             val views = RemoteViews(context.packageName, R.layout.dining_widget)
             views.setTextViewText(R.id.menuTitle, widgetText)
+            //Setting button behavior
             views.setOnClickPendingIntent(R.id.leftButton, getSelfPendingIntent(context, L_BUTTON_CLICK, appWidgetId))
             views.setOnClickPendingIntent(R.id.rightButton, getSelfPendingIntent(context, R_BUTTON_CLICK, appWidgetId))
             views.setOnClickPendingIntent(R.id.menuTitle, getUpdatePendingIntent(context, appWidgetId))
+            //Intent sets up listview adapter
             val intent = Intent(context, DiningWidgetService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                putExtra("Button", "none")
                 //Needed because Android caches this intent, since it views it as a duplicate of the original as extras
                 //aren't compared.
                 data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
@@ -129,14 +132,14 @@ class DiningWidget : AppWidgetProvider() {
             // Instruct the widget manager to update the widget
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
-
+        //Helper function for button pending intents
         private fun getSelfPendingIntent(context: Context, action: String, appWidgetId: Int): PendingIntent {
             val intent = Intent(context, DiningWidget::class.java)
             intent.action = action
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             return PendingIntent.getBroadcast(context, appWidgetId, intent, 0)
         }
-
+        //Helper function for refreshing menu if user clicks on title
         private fun getUpdatePendingIntent(context: Context, appWidgetId: Int): PendingIntent {
             val intent = Intent(context, DiningWidget::class.java)
             intent.action = REFRESH_MENU
@@ -151,7 +154,7 @@ class DiningWidget : AppWidgetProvider() {
         }
 
         // Read the prefix from the SharedPreferences object for this widget.
-        // If there is no preference saved, get the default from a resource
+        // If there is no preference saved, use default "none"
         internal fun loadButtonPref(context: Context, appWidgetId: Int): String {
             val prefs = context.getSharedPreferences(PREFS_NAME, 0)
             val buttonValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)

@@ -30,6 +30,7 @@ class DiningRemoteViewsFactory(
     private val apiService = DiningAPIService.create()
     private val mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
         AppWidgetManager.INVALID_APPWIDGET_ID)
+    //TODO: Consider adding a cache system
 
     override fun onCreate() {
         Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
@@ -109,9 +110,9 @@ class DiningRemoteViewsFactory(
                     }
                 }
                 else -> {
-                    Log.d("Widget Service",
-                        "usedButton string extra was not a valid option: $usedButton"
-                    )
+//                    Log.d(LOG_TAG,
+//                        "usedButton string extra was not a valid option: $usedButton"
+//                    )
                 }
             }
         }
