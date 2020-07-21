@@ -80,6 +80,7 @@ class DiningWidget : AppWidgetProvider() {
                 appWidgetManager.updateAppWidget(appWidgetId, views)
             }
             REFRESH_MENU -> {
+                Log.d(LOG_TAG, "clicked")
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 if(context != null) {
                     saveButtonPref(context, appWidgetId, "none")
@@ -110,6 +111,7 @@ class DiningWidget : AppWidgetProvider() {
             context: Context, appWidgetManager: AppWidgetManager,
             appWidgetId: Int
         ) {
+            Log.d(LOG_TAG, "in update")
             //Fetch selected dining commons from SharedPreferences, which was selected from DiningWidgetConfigureActivity.kt
             val widgetText = DiningWidgetConfigureActivity.loadTitlePref(context, appWidgetId)
             //SharedPreferences value that determines if the menu should display the next/previous meal
