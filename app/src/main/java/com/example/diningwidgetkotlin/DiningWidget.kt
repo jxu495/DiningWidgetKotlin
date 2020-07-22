@@ -84,6 +84,9 @@ class DiningWidget : AppWidgetProvider() {
             }
             REFRESH_MENU -> {
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+                if(DEBUG) {
+                    Log.d(LOG_TAG, "Refreshing menu for id $appWidgetId")
+                }
                 if(context != null) {
                     saveButtonPref(context, appWidgetId, "none")
                     Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
@@ -115,7 +118,7 @@ class DiningWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
             if(DEBUG) {
-                Log.d(LOG_TAG, "in updateAppWidget")
+                Log.d(LOG_TAG, "in updateAppWidget, for ID $appWidgetId")
             }
             //Fetch selected dining commons from SharedPreferences, which was selected from DiningWidgetConfigureActivity.kt
             val widgetText = DiningWidgetConfigureActivity.loadTitlePref(context, appWidgetId)

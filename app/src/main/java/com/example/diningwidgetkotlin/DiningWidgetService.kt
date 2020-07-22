@@ -30,7 +30,7 @@ class DiningRemoteViewsFactory(
     private val apiService = DiningAPIService.create()
     private val mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
         AppWidgetManager.INVALID_APPWIDGET_ID)
-    //TODO: Consider adding a cache system
+    //TODO: Consider adding a cache system, place mealIndex in sharedPref since the widget process is ended by system if low on memory
 
     companion object {
         const val LOG_TAG = "Widget Factory"
