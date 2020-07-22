@@ -32,6 +32,11 @@ class DiningRemoteViewsFactory(
         AppWidgetManager.INVALID_APPWIDGET_ID)
     //TODO: Consider adding a cache system
 
+    companion object {
+        const val LOG_TAG = "Widget Factory"
+        const val DEBUG = true
+    }
+
     override fun onCreate() {
         Toast.makeText(context, R.string.fetch_menu_toast, Toast.LENGTH_SHORT).show()
     }
@@ -92,7 +97,9 @@ class DiningRemoteViewsFactory(
 
     private fun getMeal(): Meal {
         var usedButton = DiningWidget.loadButtonPref(context, mAppWidgetId)
-//        Log.d(LOG_TAG, "in getMeal, usedbutton is $usedButton")
+        if(DEBUG) {
+            Log.d(LOG_TAG, "in getMeal, usedbutton is $usedButton")
+        }
         if(usedButton != null || usedButton == "none") {
             when(usedButton) {
                 "left" -> {
@@ -110,11 +117,14 @@ class DiningRemoteViewsFactory(
                     }
                 }
                 else -> {
-//                    Log.d(LOG_TAG,
-//                        "usedButton string extra was not a valid option: $usedButton"
-//                    )
+                    if(DEBUG) {
+                        Log.d(LOG_TAG, "usedButton string extra was not a valid option: $usedButton")
+                    }
                 }
             }
+        }
+        if(DEBUG) {
+            Log.d(LOG_TAG, "mealIndex value was $mealIndex")
         }
         return meals[mealIndex]
     }
@@ -145,8 +155,5 @@ class DiningRemoteViewsFactory(
 
     override fun onDestroy() {
 
-    }
-    companion object {
-        const val LOG_TAG = "Widget Factory"
     }
 }

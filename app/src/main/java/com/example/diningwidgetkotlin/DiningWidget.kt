@@ -23,6 +23,9 @@ class DiningWidget : AppWidgetProvider() {
     ) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
+            if(DEBUG) {
+                Log.d(LOG_TAG, "appWidgetIds includes $appWidgetId")
+            }
             updateAppWidget(context, appWidgetManager, appWidgetId)
         }
     }
@@ -80,7 +83,6 @@ class DiningWidget : AppWidgetProvider() {
                 appWidgetManager.updateAppWidget(appWidgetId, views)
             }
             REFRESH_MENU -> {
-                Log.d(LOG_TAG, "clicked")
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 if(context != null) {
                     saveButtonPref(context, appWidgetId, "none")
@@ -106,12 +108,15 @@ class DiningWidget : AppWidgetProvider() {
         const val UPDATE_MEAL = "com.example.diningwidgetkotlin.UPDATE_MEAL"
         //debug use
         const val LOG_TAG = "Dining Widget"
+        const val DEBUG = true
 
         internal fun updateAppWidget(
             context: Context, appWidgetManager: AppWidgetManager,
             appWidgetId: Int
         ) {
-            Log.d(LOG_TAG, "in update")
+            if(DEBUG) {
+                Log.d(LOG_TAG, "in updateAppWidget")
+            }
             //Fetch selected dining commons from SharedPreferences, which was selected from DiningWidgetConfigureActivity.kt
             val widgetText = DiningWidgetConfigureActivity.loadTitlePref(context, appWidgetId)
             //SharedPreferences value that determines if the menu should display the next/previous meal
