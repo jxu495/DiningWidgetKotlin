@@ -51,6 +51,9 @@ class DiningRemoteViewsFactory(
         val commons = DiningWidgetConfigureActivity.loadTitlePref(context, mAppWidgetId)
             .toLowerCase()
             .replace(' ', '-')
+        if(DEBUG) {
+            Log.d(LOG_TAG, "Loaded $commons from SharedPreferences.")
+        }
         val mealCall = apiService.getMeals(context.getString(R.string.apikey), currTime, commons)
         try {
             val response = mealCall.execute()

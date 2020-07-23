@@ -33,6 +33,9 @@ class DiningWidget : AppWidgetProvider() {
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
+            if(DEBUG) {
+                Log.d(LOG_TAG, "Deleting $appWidgetId shared pref")
+            }
             DiningWidgetConfigureActivity.deleteTitlePref(context, appWidgetId)
             deleteButtonPref(context, appWidgetId)
         }
