@@ -52,7 +52,7 @@ class DiningRemoteViewsFactory(
             .toLowerCase()
             .replace(' ', '-')
         if(DEBUG) {
-            Log.d(LOG_TAG, "Loaded $commons from SharedPreferences.")
+            Log.d(LOG_TAG, "Loaded $commons from SharedPreferences for id $mAppWidgetId.")
         }
         val mealCall = apiService.getMeals(context.getString(R.string.apikey), currTime, commons)
         try {
