@@ -56,6 +56,7 @@ class DiningWidget : AppWidgetProvider() {
         when(intent?.action) {
             R_BUTTON_CLICK -> {
                 //TODO: Can replace most of these with a single function, aside from update meal
+                //TODO: restore original update frequency, check why fetching menu displayed when destroying widget consider moving toast to factory before getmenu
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 if(context != null) {
                     saveButtonPref(context, appWidgetId, "right")
@@ -83,7 +84,7 @@ class DiningWidget : AppWidgetProvider() {
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
                 views.setTextViewText(R.id.mealTime, mealInfo)
                 val appWidgetManager = AppWidgetManager.getInstance(context)
-                appWidgetManager.updateAppWidget(appWidgetId, views)
+                appWidgetManager.partiallyUpdateAppWidget(appWidgetId, views)
             }
             REFRESH_MENU -> {
                 val appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
